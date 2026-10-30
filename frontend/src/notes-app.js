@@ -102,7 +102,7 @@ export class NotesApp extends LitElement {
 
   render() {
     return html`
-      <h1>Notes</h1>
+      <h1>Notes (preview)</h1>
       <form @submit=${this.add}>
         <input aria-label="New note" placeholder="Write a note" />
         <lit-material-button type="submit">Add</lit-material-button>
