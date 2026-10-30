@@ -57,7 +57,7 @@ jobs:
           KUBE_DC_CLIENT_ID: ${{ vars.KUBE_DC_CLIENT_ID || secrets.KUBE_DC_CLIENT_ID }}
           KUBE_DC_CLIENT_SECRET: ${{ secrets.KUBE_DC_CLIENT_SECRET }}
           KUBE_DC_CA_CERT: ${{ secrets.KUBE_DC_CA_CERT }}
-        run: echo "KUBECONFIG=$(deploy/kubeconfig.sh)" >> "$GITHUB_ENV"
+        run: deploy/kubeconfig.sh
       - id: deploy
         env:
           PULL_USER: ${{ github.repository_owner }}
