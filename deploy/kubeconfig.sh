@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
-# Write a kubeconfig for a kube-dc machine identity and print its path.
+# Write a kubeconfig for a kube-dc machine identity. In GitHub Actions it
+# masks the token and exports KUBECONFIG for later steps; elsewhere it prints
+# the path: KUBECONFIG=$(deploy/kubeconfig.sh).
 # Inputs (environment): KUBE_DC_API_SERVER, KUBE_DC_TOKEN_URL, KUBE_DC_CLIENT_ID;
 # optional KUBE_DC_CA_CERT (PEM) when the API server's certificate is not
 # publicly trusted. Sign-in:
@@ -23,7 +25,7 @@ else
     --data-urlencode "client_secret=${KUBE_DC_CLIENT_SECRET:?KUBE_DC_CLIENT_SECRET or KUBE_DC_AUDIENCE}" | jq -r .access_token)
 fi
 [ -n "$token" ] && [ "$token" != null ] || { echo "token request refused" >&2; exit 1; }
-echo "::add-mask::$token"
+[ -n "${GITHUB_ENV:-}" ] && echo "::add-mask::$token"
 
 config="${RUNNER_TEMP:-/tmp}/kube-dc.kubeconfig"
 export KUBECONFIG="$config"
@@ -37,4 +39,8 @@ kubectl config set-credentials ci --token="$token" >/dev/null
 kubectl config set-context kube-dc --cluster=kube-dc --user=ci >/dev/null
 kubectl config use-context kube-dc >/dev/null
 chmod 600 "$config"
-echo "$config"
+if [ -n "${GITHUB_ENV:-}" ]; then
+  echo "KUBECONFIG=$config" >> "$GITHUB_ENV"
+else
+  echo "$config"
+fi
