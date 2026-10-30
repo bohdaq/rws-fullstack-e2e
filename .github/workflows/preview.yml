@@ -41,10 +41,15 @@ jobs:
         run: echo "KUBECONFIG=$(deploy/kubeconfig.sh)" >> "$GITHUB_ENV"
       - name: Remove the preview
         if: github.event.action == 'closed'
+        env:
+          PULL_TOKEN: ${{ secrets.GHCR_PULL_TOKEN }}
         run: |
           app="${{ steps.names.outputs.app }}"
           kubectl -n "${{ vars.KUBE_DC_PREVIEW_NAMESPACE }}" delete deployment,service "$app" --ignore-not-found
-          kubectl -n "${{ vars.KUBE_DC_PREVIEW_NAMESPACE }}" delete secret "$app-pull" --ignore-not-found
+          # A pull Secret exists only for private images.
+          if [ -n "$PULL_TOKEN" ]; then
+            kubectl -n "${{ vars.KUBE_DC_PREVIEW_NAMESPACE }}" delete secret "$app-pull" --ignore-not-found
+          fi
       - if: github.event.action != 'closed'
         uses: docker/setup-buildx-action@v3
       - if: github.event.action != 'closed'
@@ -59,6 +64,8 @@ jobs:
           context: .
           push: true
           tags: ${{ steps.names.outputs.image }}
+          # Links the package to this repository (and its visibility).
+          labels: org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
       - id: deploy

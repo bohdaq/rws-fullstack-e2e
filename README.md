@@ -24,8 +24,9 @@ in another (http://127.0.0.1:5173, `/api` proxied to the app).
    arrive in Secret `<app>-db-owner`, which the app reads; without it notes
    are kept in memory. `<app>` is the repository name in lower case.
 3. **Machine identity.** Organization → Access → Machine identities: create
-   one in a group that may manage both projects, and open **Show
-   credentials**.
+   one in an Organization group with the `developer` role in both projects
+   (`admin` if the image is private: the pull Secret needs it), and open
+   **Show credentials**.
 4. **GitHub settings** (Settings → Secrets and variables → Actions):
 
    | Kind | Name | Value |
