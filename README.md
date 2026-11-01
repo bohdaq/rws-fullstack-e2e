@@ -52,3 +52,4 @@ in another (http://127.0.0.1:5173, `/api` proxied to the app).
    URL (`preview`), removed when the PR closes.
 
 By hand: `KUBECONFIG=$(deploy/kubeconfig.sh) deploy/deploy.sh <namespace> <app> <image>`.
+<!-- preview db test -->
