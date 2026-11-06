@@ -54,3 +54,4 @@ in another (http://127.0.0.1:5173, `/api` proxied to the app).
 By hand: `KUBECONFIG=$(deploy/kubeconfig.sh) deploy/deploy.sh <namespace> <app> <image>`.
 
 <!-- preview database masking test 2026-11-06 -->
+<!-- rebuild after the builder placement fix -->
