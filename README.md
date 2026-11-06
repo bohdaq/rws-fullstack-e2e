@@ -55,3 +55,4 @@ By hand: `KUBECONFIG=$(deploy/kubeconfig.sh) deploy/deploy.sh <namespace> <app> 
 
 <!-- preview database masking test 2026-11-06 -->
 <!-- rebuild after the builder placement fix -->
+<!-- rebuild with token refresh -->
